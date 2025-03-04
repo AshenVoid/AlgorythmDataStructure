@@ -25,15 +25,38 @@ class Stack:
     def __str__(self):
         return str(self.__items)
 
+def are_parenthesis_valid(string: str) -> bool:
+    stack = Stack()
+    pairs = {')': '(', '}': '{', ']': '['}
 
-my_stack = Stack()
-my_stack.push(3)
-my_stack.push(4)
-my_stack.push(5)
-print(my_stack.peek())  # 5
-print(my_stack.size())  # 3
-my_stack.push(6)
-print(my_stack.peek())  # 6
-print(my_stack.size())  # 4
-print(my_stack.stack_pop())  # 6
-print(my_stack)  # [3, 4, 5]
+    for char in string:
+        if char in pairs.values():       #yeet na stack když open
+            stack.push(char)
+        elif char in pairs:     #když close
+            if stack.isEmpty() or stack.stack_pop() != pairs[char]:      #validace contentu a kontrola výstřelu (y)
+                return False
+    return stack.isEmpty()      #když true my gucci
+
+'''
+input = "())"  #False
+input0 = "({})" #True
+input1 = "({({}[])[]})" #True
+input2 = "({({}[])[})" #False
+# ------------------------ Level 2 -------------------
+input3 = "(8*5{8({3+8}-[5-8])+[9*0]})" #True
+input4 = "(8*5{8({3+8-[5-8])+[9*0]})" #False
+input5 = "(8*5{8(3+8}-[5-8])+[9*0]})" #False
+'''
+
+inputs = [
+    "())",  # False
+    "({})", # True
+    "({({}[])[]})", # True
+    "({({}[])[})", # False
+    "(8*5{8({3+8}-[5-8])+[9*0]})", # True
+    "(8*5{8({3+8-[5-8])+[9*0]})", # False
+    "(8*5{8(3+8}-[5-8])+[9*0]})" # False
+]
+
+for inp in inputs:
+    print(f"{inp}: {are_parenthesis_valid(inp)}")
